@@ -9,7 +9,6 @@ data = pd.read_csv('nota-codigo-descricao.csv',
                 low_memory=False)
 
 finalList = []
-
 for group, frame in data.groupby(['NOTA']):
 
     record = []

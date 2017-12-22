@@ -1,10 +1,11 @@
 """
 Description     : Simple Python implementation of the Apriori Algorithm
 
-Usage:
-    $python apriori.py -f DATASET.csv -s minSupport  -c minConfidence
+Original        : https://github.com/asaini/Apriori
 
-    $python apriori.py -f DATASET.csv -s 0.15 -c 0.6
+Modified at     : 19/12/2017
+
+Modifications   : Lift was also calculated for the rules
 """
 
 import sys
@@ -124,49 +125,3 @@ def printResults(items, rules):
 
         pre, post = rule
         print("Rule: %s ==> %s , %.3f" % (str(pre), str(post), confidence))
-
-
-def dataFromFile(fname):
-        """Function which reads from the file and yields a generator"""
-        file_iter = open(fname, 'rU')
-        for line in file_iter:
-                line = line.strip().rstrip(',')                         # Remove trailing comma
-                record = frozenset(line.split(','))
-                yield record
-
-
-if __name__ == "__main__":
-
-    optparser = OptionParser()
-    optparser.add_option('-f', '--inputFile',
-                         dest='input',
-                         help='filename containing csv',
-                         default=None)
-    optparser.add_option('-s', '--minSupport',
-                         dest='minS',
-                         help='minimum support value',
-                         default=0.15,
-                         type='float')
-    optparser.add_option('-c', '--minConfidence',
-                         dest='minC',
-                         help='minimum confidence value',
-                         default=0.6,
-                         type='float')
-
-    (options, args) = optparser.parse_args()
-
-    inFile = None
-    if options.input is None:
-            inFile = sys.stdin
-    elif options.input is not None:
-            inFile = dataFromFile(options.input)
-    else:
-            print('No dataset filename specified, system with exit\n')
-            sys.exit('System will exit')
-
-    minSupport = options.minS
-    minConfidence = options.minC
-
-    items, rules = runApriori(inFile, minSupport, minConfidence)
-
-    printResults(items, rules)
